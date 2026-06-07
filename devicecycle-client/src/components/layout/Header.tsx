@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { Sun, Moon, Bell, X, CheckCheck } from 'lucide-react'
+import { Sun, Moon, Bell, X, CheckCheck, Zap } from 'lucide-react'
 import { useTheme } from '../../context/ThemeContext'
 import { useAuth } from '../../context/AuthContext'
 import { useQuery } from '@tanstack/react-query'
@@ -81,7 +81,15 @@ export default function Header() {
   }
 
   return (
-    <header className="h-[60px] flex items-center justify-end px-6 bg-white dark:bg-[#0f0f1a] border-b border-gray-200 dark:border-gray-800/60 flex-shrink-0 gap-4">
+    <header className="h-[60px] flex items-center justify-end px-4 md:px-6 bg-white dark:bg-[#0f0f1a] border-b border-gray-200 dark:border-gray-800/60 flex-shrink-0 gap-4">
+
+      {/* Mobile Brand Logo */}
+      <div className="flex md:hidden items-center gap-2 mr-auto">
+        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-brand flex-shrink-0">
+          <Zap size={13} className="text-white" strokeWidth={2.5} />
+        </div>
+        <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">DeviceCycle</span>
+      </div>
 
       <div className="flex items-center gap-1">
 

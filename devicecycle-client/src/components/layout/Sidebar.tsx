@@ -33,7 +33,7 @@ export default function Sidebar() {
   const isAdmin = user?.role === 'Admin'
 
   return (
-    <aside className="w-[220px] flex-shrink-0 flex flex-col bg-white dark:bg-[#0f0f1a] border-r border-gray-200 dark:border-gray-800/60 h-full">
+    <aside className="hidden md:flex w-[220px] flex-shrink-0 flex flex-col bg-white dark:bg-[#0f0f1a] border-r border-gray-200 dark:border-gray-800/60 h-full">
 
       {/* ── Brand / Logo ── */}
       <div className="h-[60px] flex items-center gap-3 px-5 border-b border-gray-200 dark:border-gray-800/60">
