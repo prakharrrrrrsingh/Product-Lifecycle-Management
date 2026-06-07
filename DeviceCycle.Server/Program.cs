@@ -115,15 +115,15 @@ var app = builder.Build();
 try
 {
     using var scope = app.Services.CreateScope();
+    var context = scope.ServiceProvider.GetRequiredService<DeviceRegistrationLifecycleContext>();
+    await context.Database.MigrateAsync();
+
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     foreach (var role in new[] { "Admin", "User" })
     {
         if (!await roleManager.RoleExistsAsync(role))
             await roleManager.CreateAsync(new IdentityRole(role));
     }
-
-    var context = scope.ServiceProvider.GetRequiredService<DeviceRegistrationLifecycleContext>();
-    await context.Database.MigrateAsync();
     
     // Seed Firmware Versions
     var firmwares = new List<FirmwareVersion>
