@@ -53,7 +53,7 @@ builder.Services.AddCors(options =>
 });
 
 // EF Core with PostgreSQL
-var connectionString = builder.Configuration.GetConnectionString("dbcs") ?? Environment.GetEnvironmentVariable("DATABASE_URL");
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? builder.Configuration.GetConnectionString("dbcs");
 if (!string.IsNullOrEmpty(connectionString) && connectionString.StartsWith("postgres", StringComparison.OrdinalIgnoreCase))
 {
     var uri = new Uri(connectionString);
