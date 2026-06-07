@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-gray-50 dark:bg-[#0c0c14] text-gray-900 dark:text-gray-100;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar              { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track        { background: transparent; }
+  ::-webkit-scrollbar-thumb        { @apply bg-gray-300 dark:bg-gray-700 rounded-full; }
+  ::-webkit-scrollbar-thumb:hover  { @apply bg-gray-400 dark:bg-gray-600; }
+}
+
+@layer components {
+  /* ── Surface / Card ─────────────────────────────────────────── */
+  .card {
+    @apply bg-white dark:bg-[#13131f] border border-gray-200 dark:border-gray-800/80 rounded-xl shadow-card;
+  }
+  .card-hover {
+    @apply card transition-all duration-200 hover:shadow-card-hover hover:-translate-y-0.5 hover:border-brand-300 dark:hover:border-brand-700/60;
+  }
+
+  /* ── Status Badges ──────────────────────────────────────────── */
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  .badge-active {
+    @apply badge bg-emerald-100 text-emerald-800 dark:bg-emerald-900/25 dark:text-emerald-400;
+  }
+  .badge-inactive {
+    @apply badge bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400;
+  }
+  .badge-retired {
+    @apply badge bg-amber-100 text-amber-800 dark:bg-amber-900/25 dark:text-amber-400;
+  }
+  .badge-decommissioned {
+    @apply badge bg-red-100 text-red-800 dark:bg-red-900/25 dark:text-red-400;
+  }
+  .badge-latest {
+    @apply badge bg-brand-100 text-brand-700 dark:bg-brand-950/60 dark:text-brand-300;
+  }
+
+  /* ── Inputs ─────────────────────────────────────────────────── */
+  .input {
+    @apply w-full px-3.5 py-2.5 text-sm rounded-lg
+           bg-white dark:bg-gray-900/60
+           border border-gray-300 dark:border-gray-700
+           text-gray-900 dark:text-gray-100
+           placeholder-gray-400 dark:placeholder-gray-600
+           focus:outline-none focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 dark:focus:border-brand-400
+           transition-all duration-150;
+  }
+  .input-error {
+    @apply border-red-400 dark:border-red-600 focus:ring-red-400/30 focus:border-red-400;
+  }
+
+  /* ── Buttons ─────────────────────────────────────────────────── */
+  .btn {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed select-none;
+  }
+  .btn-primary {
+    @apply btn bg-brand-600 hover:bg-brand-700 active:bg-brand-800 text-white shadow-brand hover:shadow-lg;
+  }
+  .btn-secondary {
+    @apply btn bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300;
+  }
+  .btn-ghost {
+    @apply btn text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100;
+  }
+  .btn-danger {
+    @apply btn bg-red-600 hover:bg-red-700 active:bg-red-800 text-white;
+  }
+  .btn-icon {
+    @apply w-8 h-8 flex items-center justify-center rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 transition-colors duration-150;
+  }
+
+  /* ── Label ───────────────────────────────────────────────────── */
+  .form-label {
+    @apply block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5;
+  }
+
+  /* ── Section title ───────────────────────────────────────────── */
+  .page-title {
+    @apply text-xl font-semibold text-gray-900 dark:text-gray-100 tracking-tight;
+  }
+  .page-subtitle {
+    @apply text-sm text-gray-500 dark:text-gray-400 mt-0.5;
+  }
+
+  /* ── Divider ─────────────────────────────────────────────────── */
+  .divider {
+    @apply border-t border-gray-200 dark:border-gray-800;
+  }
+}
+
+/* ── Pulse dot for Active status ─────────────────────────────── */
+@keyframes status-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.35; transform: scale(0.7); }
+}
+.pulse-dot { animation: status-pulse 2s ease-in-out infinite; }
+
+/* ── Timeline vertical line gradient ─────────────────────────── */
+.timeline-line {
+  position: absolute;
+  left: 19px;
+  top: 36px;
+  bottom: -8px;
+  width: 2px;
+  background: linear-gradient(to bottom, #6366f1 0%, transparent 100%);
+  border-radius: 2px;
+}
