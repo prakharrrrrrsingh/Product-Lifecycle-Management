@@ -24,16 +24,17 @@ Managing device fleets manually is messy. Spreadsheets go out of date, nobody kn
 ## Tech Stack
 
 **Frontend**
-- React 18 + Vite
-- Tailwind CSS with dark mode support
+- React 18 + Vite (TypeScript)
+- Tailwind CSS with responsive layout and dark mode support
 - TanStack Query v5 for data fetching
 - Lucide React icons
 
 **Backend**
 - ASP.NET Core 8 Web API
 - Entity Framework Core 8
-- SQL Server
+- PostgreSQL Database
 - ASP.NET Identity + JWT Bearer authentication
+- Docker for containerization
 
 ---
 
@@ -43,13 +44,15 @@ Managing device fleets manually is messy. Spreadsheets go out of date, nobody kn
 ├── DeviceCycle.Server/
 │   ├── Controllers/        API endpoints
 │   ├── Models/             EF Core models and DbContext
-│   ├── Migrations/         Database migrations
-│   └── appsettings.json    Configuration
+│   ├── Migrations/         PostgreSQL migrations
+│   ├── appsettings.json    Configuration
+│   └── Dockerfile          Production container config
 │
 └── devicecycle-client/
+    ├── vercel.json         Deployment routing config
     └── src/
         ├── api/            API calls
-        ├── components/     Reusable UI components
+        ├── components/     Reusable UI components (layout, charts)
         ├── pages/          Dashboard, Devices, Firmware, ChangeLogs, Login
         └── context/        Auth and Theme providers
 ```
@@ -61,29 +64,45 @@ Managing device fleets manually is messy. Spreadsheets go out of date, nobody kn
 ### Prerequisites
 - .NET 8 SDK
 - Node.js 18+
-- SQL Server (local or express)
+- PostgreSQL (local instance or cloud database like Neon.tech)
 
-### Backend
+### Backend Setup
 
-1. Update the connection string in `DeviceCycle.Server/appsettings.json`
-2. Apply migrations:
-```bash
-dotnet ef database update
-```
+1. Configure your database connection string:
+   - In `DeviceCycle.Server/appsettings.json`, update the `ConnectionStrings:dbcs` setting, OR:
+   - Set the `DATABASE_URL` environment variable pointing to your PostgreSQL database.
+2. Run database migrations:
+   ```bash
+   dotnet ef database update
+   ```
 3. Run the server:
-```bash
-dotnet run
-```
-API runs at `https://localhost:7110`
+   ```bash
+   dotnet run
+   ```
+   The API will listen on `https://localhost:7110` (with HTTPS profile) or `http://localhost:5297` (HTTP).
 
-### Frontend
+### Frontend Setup
 
-```bash
-cd devicecycle-client
-npm install
-npm run dev
-```
-App runs at `http://localhost:8080`
+1. Install dependencies:
+   ```bash
+   cd devicecycle-client
+   npm install
+   ```
+2. Start the development server:
+   ```bash
+   npm run dev
+   ```
+   The frontend runs at `http://localhost:8080` and proxies `/api` calls to the local backend.
+
+---
+
+## Deployment
+
+The project is structured for easy, free deployment using cloud services:
+
+- **Database**: Hosted on **Neon.tech** or **Supabase** (PostgreSQL).
+- **Backend**: Deployed to **Render** as a web service running from the `Dockerfile`.
+- **Frontend**: Deployed to **Vercel** with the routing fallback (`vercel.json`) pointing to the Render API endpoint via the `VITE_API_URL` environment variable.
 
 ---
 
@@ -101,14 +120,3 @@ App runs at `http://localhost:8080`
 | GET | `/api/changelogs` | Query change logs with filters |
 | GET | `/api/firmware` | List firmware versions |
 | POST | `/api/firmware` | Add firmware version (Admin) |
-
----
-
-## Team
-
-| Name | Role |
-|---|---|
-| Rutuja | Team Lead — Database design and data modeling |
-| Prakhar | Frontend — React UI, components, API integration |
-| Venkat | Authentication — JWT, Identity, role management |
-| Anshu | Backend — API controllers, business logic, EF Core |
