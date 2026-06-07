@@ -143,6 +143,50 @@ try
     }
     await context.SaveChangesAsync();
 
+    // Seed Devices if database is empty
+    if (!await context.Devices.AnyAsync())
+    {
+        var random = new Random();
+        var models = new[] { "ThinkPad X1", "Dell XPS 15", "MacBook Pro M3", "HP EliteBook", "Lenovo T14", "Surface Pro 9", "ASUS ZenBook", "Razer Blade 16", "ThinkPad T16", "HP Spectre", "Acer Swift", "MacBook Air M2", "Lenovo Yoga", "Dell Latitude" };
+        var statuses = new[] { "active", "inactive", "retired", "decommissioned" };
+        var deviceFwOptions = new[] { null, "v1.0.0", "v2.0.0", "v3.0.0", "v4.0.0" };
+
+        var newDevices = new List<Device>();
+        for (int i = 1; i <= 30; i++)
+        {
+            var sn = $"SN-{i:D3}-{(char)('A' + (i % 26))}";
+            var model = models[i % models.Length];
+            var status = i % 4 == 0 ? statuses[i % statuses.Length] : "active";
+            var fw = deviceFwOptions[i % deviceFwOptions.Length];
+            var now = DateTime.UtcNow.AddDays(-i * 3);
+
+            var dev = new Device
+            {
+                SerialNumber = sn,
+                Model = model,
+                Status = status,
+                FirmwareVersion = fw,
+                CreatedAt = now,
+                UpdatedAt = now.AddDays(random.Next(1, 5))
+            };
+            newDevices.Add(dev);
+        }
+
+        await context.Devices.AddRangeAsync(newDevices);
+        await context.SaveChangesAsync();
+
+        foreach (var dev in newDevices)
+        {
+            context.ChangeLogs.Add(new ChangeLog
+            {
+                DeviceId = dev.Id,
+                Action = "CREATED",
+                CreatedAt = dev.CreatedAt
+            });
+        }
+        await context.SaveChangesAsync();
+    }
+
     // Cover all the devices and assign their firmware versions
     var devices = await context.Devices.ToListAsync();
     if (devices.Any())
