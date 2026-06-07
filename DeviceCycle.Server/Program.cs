@@ -41,12 +41,12 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Allow the React dev server (port 8080) to call the API
+// Allow requests from React dev server and deployed frontend
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
-        policy.WithOrigins("http://localhost:8080", "https://localhost:8080")
+        policy.AllowAnyOrigin()
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
